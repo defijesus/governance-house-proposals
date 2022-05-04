@@ -19,7 +19,7 @@ contract ArcDpiProposalPayload {
         ILendingPoolAddressesProvider(
             0xB53C1a33016B2DC2fF3653530bfF1848a515c8c5
         );
-    address public constant FEED_DPI_ETH =
+    address public constant FEED_DPI_USD =
         0xD2A593BF7594aCE1faD597adb697b5645d5edDB2;
 
     /// @notice AAVE ARC timelock
@@ -75,7 +75,7 @@ contract ArcDpiProposalPayload {
         address[] memory assets = new address[](1);
         assets[0] = DPI;
         address[] memory sources = new address[](1);
-        sources[0] = FEED_DPI_ETH;
+        sources[0] = FEED_DPI_USD;
 
         PRICE_ORACLE.setAssetSources(assets, sources);
 
