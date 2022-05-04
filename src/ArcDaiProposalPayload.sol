@@ -6,10 +6,10 @@ import { ILendingPoolConfigurator } from "./interfaces/ILendingPoolConfigurator.
 import { ILendingPoolAddressesProvider } from "./interfaces/ILendingPoolAddressesProvider.sol";
 import { IPriceOracle } from "./interfaces/IPriceOracle.sol";
 
-/// @title ArcDpiProposalPayload
+/// @title ArcDaiProposalPayload
 /// @author Governance House
-/// @notice Add DPI as Collateral on the Aave ARC Market
-contract ArcDpiProposalPayload {
+/// @notice Add DAI as Collateral on the Aave ARC Market
+contract ArcDaiProposalPayload {
 
     /// @notice AAVE ARC LendingPoolConfigurator
     ILendingPoolConfigurator constant configurator = ILendingPoolConfigurator(0x4e1c7865e7BE78A7748724Fa0409e88dc14E67aA);
@@ -36,7 +36,7 @@ contract ArcDpiProposalPayload {
     address public constant INTEREST_RATE_STRATEGY =
         0xb2eD1eCE1c13455Ce9299d35D3B00358529f3Dc8;
 
-    /// @notice DPI token
+    /// @notice DAI token
     address constant DAI = 0x6B175474E89094C44Da98b954EedeAC495271d0F;
     uint8 public constant DAI_DECIMALS = 18;
 
