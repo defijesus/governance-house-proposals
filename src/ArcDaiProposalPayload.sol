@@ -19,6 +19,9 @@ contract ArcDpiProposalPayload {
             0xB53C1a33016B2DC2fF3653530bfF1848a515c8c5
         );
 
+    address public constant FEED_DAI_USD =
+        0xAed0c38402a5d19df6E4c03F4E2DceD6e29c1ee9;
+
     /// @notice AAVE ARC timelock
     IArcTimelock constant arcTimelock = IArcTimelock(0xAce1d11d836cb3F51Ef658FD4D353fFb3c301218);
     
@@ -66,6 +69,16 @@ contract ArcDpiProposalPayload {
 
     /// @notice The AAVE ARC timelock delegateCalls this
     function execute() external {
+        IPriceOracle PRICE_ORACLE = IPriceOracle(
+            LENDING_POOL_ADDRESSES_PROVIDER.getPriceOracle()
+        );
+        address[] memory assets = new address[](1);
+        assets[0] = DAI;
+        address[] memory sources = new address[](1);
+        sources[0] = FEED_DAI_USD;
+
+        PRICE_ORACLE.setAssetSources(assets, sources);
+
         // address, ltv, liqthresh, bonus
         configurator.initReserve(
             ATOKEN_IMPL,
