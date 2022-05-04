@@ -4,6 +4,7 @@ pragma solidity 0.8.10;
 import { IArcTimelock } from  "./interfaces/IArcTimelock.sol";
 import { ILendingPoolConfigurator } from "./interfaces/ILendingPoolConfigurator.sol";
 import { ILendingPoolAddressesProvider } from "./interfaces/ILendingPoolAddressesProvider.sol";
+import { IPriceOracle } from "./interfaces/IPriceOracle.sol";
 
 /// @title ArcDpiProposalPayload
 /// @author Governance House
