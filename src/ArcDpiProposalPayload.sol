@@ -2,7 +2,7 @@
 pragma solidity 0.8.10;
 
 import { IArcTimelock } from  "./interfaces/IArcTimelock.sol";
-import { ILendingPoolConfigurator } from "./interfaces/ILendingPoolConfigurator.sol";
+import "./interfaces/ILendingPoolConfigurator.sol";
 import { ILendingPoolAddressesProvider } from "./interfaces/ILendingPoolAddressesProvider.sol";
 import { IPriceOracle } from "./interfaces/IPriceOracle.sol";
 
@@ -24,14 +24,17 @@ contract ArcDpiProposalPayload {
 
     /// @notice AAVE ARC timelock
     IArcTimelock constant arcTimelock = IArcTimelock(0xAce1d11d836cb3F51Ef658FD4D353fFb3c301218);
+
+    /// @notice AAVE treasury
+    address public constant TREASURY = 0x464C71f6c2F760DdA6093dCB91C24c39e5d6e18c;
     
     /// @notice Aave default implementations
     address public constant ATOKEN_IMPL =
         0x6faeE7AaC498326660aC2B7207B9f67666073111;
     address public constant VARIABLE_DEBT_IMPL =
-        0x2386694b2696015dB1a511AB9cD310e800F93055;
+        0x82b488281aeF001dAcF106b085cc59EEf0995131;
     address public constant STABLE_DEBT_IMPL =
-        0x5746b5b6650Dd8d9B1d9D1bbf5E7f23e9761183F;
+        0x71c60e94C10d90D0386BaC547378c136cb6aD2b4;
     address public constant INTEREST_RATE_STRATEGY =
         0xb2eD1eCE1c13455Ce9299d35D3B00358529f3Dc8;
 
@@ -69,24 +72,35 @@ contract ArcDpiProposalPayload {
 
     /// @notice The AAVE ARC timelock delegateCalls this
     function execute() external {
-        IPriceOracle PRICE_ORACLE = IPriceOracle(
-            LENDING_POOL_ADDRESSES_PROVIDER.getPriceOracle()
-        );
-        address[] memory assets = new address[](1);
-        assets[0] = DPI;
-        address[] memory sources = new address[](1);
-        sources[0] = FEED_DPI_USD;
+        // IPriceOracle PRICE_ORACLE = IPriceOracle(
+        //     LENDING_POOL_ADDRESSES_PROVIDER.getPriceOracle()
+        // );
+        // address[] memory assets = new address[](1);
+        // assets[0] = DPI;
+        // address[] memory sources = new address[](1);
+        // sources[0] = FEED_DPI_USD;
 
-        PRICE_ORACLE.setAssetSources(assets, sources);
+        // PRICE_ORACLE.setAssetSources(assets, sources);
 
         // address, ltv, liqthresh, bonus
-        configurator.initReserve(
-            ATOKEN_IMPL,
-            STABLE_DEBT_IMPL,
-            VARIABLE_DEBT_IMPL,
-            DPI_DECIMALS,
-            INTEREST_RATE_STRATEGY
-        );
+        ILendingPoolConfigurator.InitReserveInput memory input;
+        input.aTokenImpl = ATOKEN_IMPL;
+        input.stableDebtTokenImpl = STABLE_DEBT_IMPL;
+        input.variableDebtTokenImpl = VARIABLE_DEBT_IMPL;
+        input.underlyingAssetDecimals = DPI_DECIMALS;
+        input.interestRateStrategyAddress = INTEREST_RATE_STRATEGY;
+        input.underlyingAsset = DPI;
+        input.treasury = TREASURY;
+        input.underlyingAssetName = "DPI";
+        input.aTokenName = "Aave Arc market DPI";
+        input.aTokenSymbol = "aDPI";
+        input.variableDebtTokenName = "Aave Arc variable debt DPI";
+        input.variableDebtTokenSymbol = "variableDebtDPI";
+        input.stableDebtTokenName = "Aave Arc stable debt DPI";
+        input.stableDebtTokenSymbol = "stableDebtDPI";
+        ILendingPoolConfigurator.InitReserveInput[] memory inputs = new ILendingPoolConfigurator.InitReserveInput[](1);
+        inputs[0] = input;
+        configurator.batchInitReserve(inputs);
         configurator.enableBorrowingOnReserve(DPI, false);
         configurator.setReserveFactor(DPI, RESERVE_FACTOR);
         configurator.configureReserveAsCollateral(
