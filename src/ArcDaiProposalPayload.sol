@@ -17,7 +17,7 @@ contract ArcDaiProposalPayload {
     ILendingPoolAddressesProvider
         public constant LENDING_POOL_ADDRESSES_PROVIDER =
         ILendingPoolAddressesProvider(
-            0xB53C1a33016B2DC2fF3653530bfF1848a515c8c5
+            0x6FdfafB66d39cD72CFE7984D3Bbcc76632faAb00
         );
 
     address public constant FEED_DAI_USD =
@@ -73,16 +73,15 @@ contract ArcDaiProposalPayload {
 
     /// @notice The AAVE ARC timelock delegateCalls this
     function execute() external {
-        // TODO: Confirm if this can be removed safely
-        // IPriceOracle PRICE_ORACLE = IPriceOracle(
-        //     LENDING_POOL_ADDRESSES_PROVIDER.getPriceOracle()
-        // );
-        // address[] memory assets = new address[](1);
-        // assets[0] = DAI;
-        // address[] memory sources = new address[](1);
-        // sources[0] = FEED_DAI_USD;
+        IPriceOracle PRICE_ORACLE = IPriceOracle(
+            LENDING_POOL_ADDRESSES_PROVIDER.getPriceOracle()
+        );
+        address[] memory assets = new address[](1);
+        assets[0] = DAI;
+        address[] memory sources = new address[](1);
+        sources[0] = FEED_DAI_USD;
 
-        // PRICE_ORACLE.setAssetSources(assets, sources);
+        PRICE_ORACLE.setAssetSources(assets, sources);
 
         // // address, ltv, liqthresh, bonus
         ILendingPoolConfigurator.InitReserveInput memory input;
