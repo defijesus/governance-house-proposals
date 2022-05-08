@@ -27,6 +27,7 @@ contract ProposalPayloadTest is DSTest, stdCheats {
     IAaveGovernanceV2 aaveGovernanceV2 = IAaveGovernanceV2(aaveGovernanceAddress);
     IExecutorWithTimelock shortExecutor = IExecutorWithTimelock(aaveGovernanceShortExecutor);
     IProtocolDataProvider dataProvider = IProtocolDataProvider(0x71B53fC437cCD988b1b89B1D4605c3c3d0C810ea);
+    IPriceOracle priceOracle = IPriceOracle(0xB8a7bc0d13B1f5460513040a97F404b4fea7D2f3);
 
     address[] private aaveWhales;
 
@@ -77,6 +78,7 @@ contract ProposalPayloadTest is DSTest, stdCheats {
         uint256 liqThresh;
         uint256 liqBonus;
         uint256 reserveFactor;
+        address chainlinkOracle;
 
         (, ltv, liqThresh, liqBonus, reserveFactor,,,,,) = dataProvider.getReserveConfigurationData(dpi);
         assertEq(ltv, 6500);
@@ -84,6 +86,8 @@ contract ProposalPayloadTest is DSTest, stdCheats {
         assertEq(liqBonus, 10750);
         assertEq(reserveFactor, 2000);
 
+        chainlinkOracle = priceOracle.getSourceOfAsset(dpi);
+        assertEq(chainlinkOracle, 0x029849bbc0b1d93b85a8b6190e979fd38F5760E2);
     }
 
     function _executeProposal() public {

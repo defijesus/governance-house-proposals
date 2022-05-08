@@ -6,4 +6,6 @@ interface IPriceOracle {
         address[] calldata assets,
         address[] calldata sources
     ) external;
+
+    function getSourceOfAsset(address asset) external view returns (address);
 }

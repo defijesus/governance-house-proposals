@@ -20,8 +20,8 @@ contract ArcDaiProposalPayload {
             0x6FdfafB66d39cD72CFE7984D3Bbcc76632faAb00
         );
 
-    address public constant FEED_DAI_USD =
-        0xAed0c38402a5d19df6E4c03F4E2DceD6e29c1ee9;
+    address public constant FEED_DAI_ETH =
+        0x773616E4d11A78F511299002da57A0a94577F1f4;
 
     /// @notice AAVE ARC timelock
     IArcTimelock constant arcTimelock = IArcTimelock(0xAce1d11d836cb3F51Ef658FD4D353fFb3c301218);
@@ -79,7 +79,7 @@ contract ArcDaiProposalPayload {
         address[] memory assets = new address[](1);
         assets[0] = DAI;
         address[] memory sources = new address[](1);
-        sources[0] = FEED_DAI_USD;
+        sources[0] = FEED_DAI_ETH;
 
         PRICE_ORACLE.setAssetSources(assets, sources);
 
