@@ -4,6 +4,7 @@ pragma solidity 0.8.10;
 import { IArcTimelock } from  "./interfaces/IArcTimelock.sol";
 import "./interfaces/ILendingPoolConfigurator.sol";
 import { ILendingPoolAddressesProvider } from "./interfaces/ILendingPoolAddressesProvider.sol";
+import { IEcosystemReserveController } from "./interfaces/IEcosystemReserveController.sol";
 import { IPriceOracle } from "./interfaces/IPriceOracle.sol";
 
 /// @title ArcDpiProposalPayload
@@ -13,6 +14,15 @@ contract ArcDpiProposalPayload {
 
     /// @notice AAVE ARC LendingPoolConfigurator
     ILendingPoolConfigurator constant configurator = ILendingPoolConfigurator(0x4e1c7865e7BE78A7748724Fa0409e88dc14E67aA);
+
+    /// @notice Governance House Multisig
+    address constant GOV_HOUSE = 0x82cD339Fa7d6f22242B31d5f7ea37c1B721dB9C3;
+
+    /// @notice AAVE Ecosystem Reserve Controller
+    IEcosystemReserveController constant reserveController = IEcosystemReserveController(0x3d569673dAa0575c936c7c67c4E6AedA69CC630C);
+
+    /// @notice AAVE Ecosystem Reserve
+    address constant reserve = 0x25F2226B597E8F9514B3F68F00f494cF4f286491;
 
     ILendingPoolAddressesProvider
         public constant LENDING_POOL_ADDRESSES_PROVIDER =
@@ -42,6 +52,9 @@ contract ArcDpiProposalPayload {
     address constant DPI = 0x1494CA1F11D487c2bBe4543E90080AeBa4BA3C2b;
     uint8 public constant DPI_DECIMALS = 18;
 
+    /// @notice aave token
+    address constant AAVE = 0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9;
+
     uint256 public constant RESERVE_FACTOR = 2000;
     uint256 public constant LTV = 6500;
     uint256 public constant LIQUIDATION_THRESHOLD = 7000;
@@ -68,6 +81,9 @@ contract ArcDpiProposalPayload {
         withDelegatecalls[0] = true;
 
         arcTimelock.queue(targets, values, signatures, calldatas, withDelegatecalls);
+
+        // reimburse gas costs from ecosystem reserve
+        reserveController.transfer(reserve, AAVE, GOV_HOUSE, 10 ether);
     }
 
     /// @notice The AAVE ARC timelock delegateCalls this
