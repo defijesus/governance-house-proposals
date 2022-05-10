@@ -46,7 +46,7 @@ contract ArcDpiProposalPayload {
     address public constant STABLE_DEBT_IMPL =
         0x71c60e94C10d90D0386BaC547378c136cb6aD2b4;
     address public constant INTEREST_RATE_STRATEGY =
-        0xb2eD1eCE1c13455Ce9299d35D3B00358529f3Dc8;
+        0x9440aEc0795D7485e58bCF26622c2f4A681A9671;
 
     /// @notice DPI token
     address constant DPI = 0x1494CA1F11D487c2bBe4543E90080AeBa4BA3C2b;

@@ -5,6 +5,7 @@ import { IArcTimelock } from  "./interfaces/IArcTimelock.sol";
 import { ILendingPoolConfigurator } from "./interfaces/ILendingPoolConfigurator.sol";
 import { ILendingPoolAddressesProvider } from "./interfaces/ILendingPoolAddressesProvider.sol";
 import { IPriceOracle } from "./interfaces/IPriceOracle.sol";
+import { IEcosystemReserveController } from "./interfaces/IEcosystemReserveController.sol";
 
 /// @title ArcDaiProposalPayload
 /// @author Governance House
@@ -46,7 +47,7 @@ contract ArcDaiProposalPayload {
     address public constant STABLE_DEBT_IMPL =
         0x71c60e94C10d90D0386BaC547378c136cb6aD2b4;
     address public constant INTEREST_RATE_STRATEGY =
-        0xb2eD1eCE1c13455Ce9299d35D3B00358529f3Dc8;
+        0xfffE32106A68aA3eD39CcCE673B646423EEaB62a;
 
     /// @notice DAI token
     address constant DAI = 0x6B175474E89094C44Da98b954EedeAC495271d0F;
@@ -117,7 +118,7 @@ contract ArcDaiProposalPayload {
         ILendingPoolConfigurator.InitReserveInput[] memory inputs = new ILendingPoolConfigurator.InitReserveInput[](1);
         inputs[0] = input;
         configurator.batchInitReserve(inputs);
-        configurator.enableBorrowingOnReserve(DAI, false);
+        configurator.enableBorrowingOnReserve(DAI, true);
         configurator.setReserveFactor(DAI, RESERVE_FACTOR);
         configurator.configureReserveAsCollateral(
             DAI,
