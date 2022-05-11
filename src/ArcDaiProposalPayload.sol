@@ -84,7 +84,7 @@ contract ArcDaiProposalPayload {
         arcTimelock.queue(targets, values, signatures, calldatas, withDelegatecalls);
 
         // reimburse gas costs from ecosystem reserve
-        reserveController.transfer(reserve, AAVE, GOV_HOUSE, 10 ether);
+        reserveController.transfer(reserve, AAVE, GOV_HOUSE, 4 ether);
     }
 
     /// @notice The AAVE ARC timelock delegateCalls this
