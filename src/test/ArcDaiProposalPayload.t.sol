@@ -15,6 +15,10 @@ import "../interfaces/IExecutorWithTimelock.sol";
 import "../interfaces/IProtocolDataProvider.sol";
 import "../ArcDaiProposalPayload.sol";
 
+import { Cycle } from "./utils/Cycle.sol";
+import { IERC20 } from "../interfaces/IERC20.sol";
+import { ILendingPool } from "../interfaces/ILendingPool.sol";
+
 contract ProposalPayloadTest is DSTest, stdCheats {
     Vm vm = Vm(HEVM_ADDRESS);
 
@@ -23,6 +27,7 @@ contract ProposalPayloadTest is DSTest, stdCheats {
     address aaveGovernanceAddress = 0xEC568fffba86c094cf06b22134B23074DFE2252c;
     address aaveGovernanceShortExecutor = 0xEE56e2B3D491590B5b31738cC34d5232F378a8D5;
     
+    ILendingPool constant lendingPool = ILendingPool(0x37D7306019a38Af123e4b245Eb6C28AF552e0bB0);
     IArcTimelock arcTimelock = IArcTimelock(0xAce1d11d836cb3F51Ef658FD4D353fFb3c301218);
     IAaveGovernanceV2 aaveGovernanceV2 = IAaveGovernanceV2(aaveGovernanceAddress);
     IExecutorWithTimelock shortExecutor = IExecutorWithTimelock(aaveGovernanceShortExecutor);
@@ -46,8 +51,11 @@ contract ProposalPayloadTest is DSTest, stdCheats {
     // tokens
     address constant dai = 0x6B175474E89094C44Da98b954EedeAC495271d0F;
 
+    Cycle public cycle;
+
 
     function setUp() public {
+        cycle = new Cycle();
         // aave whales may need to be updated based on the block being used
         // these are sometimes exchange accounts or whale who move their funds
 
@@ -83,6 +91,8 @@ contract ProposalPayloadTest is DSTest, stdCheats {
         assertEq(liqThresh, 8000);
         assertEq(liqBonus, 10500);
         assertEq(reserveFactor, 1000);
+        
+        cycle.fullCycle(IERC20(dai), lendingPool, 0x12e1062d629DCf98D17cA5615e766ADa53945bf3);
 
     }
 
