@@ -13,6 +13,10 @@ $ cd my-repo
 $ forge install
 ```
 
+If the compiler can't find stdlib.sol:
+1) copy this [gist](https://gist.github.com/defijesus/125b338f31a18359aa9114ba2df37add)
+2) create a new file with the contents @ `./lib/forge-std/src/stdlib.sol`
+
 ## Tests
 
 ```
